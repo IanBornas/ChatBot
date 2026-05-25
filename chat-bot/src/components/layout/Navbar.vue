@@ -72,12 +72,6 @@ defineEmits([
           <span class="overlay-minified:hidden">Settings</span>
         </router-link> 
       </li>
-      <li>
-        <router-link to="/history">
-          <span class="icon-[tabler--user] size-5"></span>
-          <span class="overlay-minified:hidden">History</span>
-        </router-link> 
-      </li>
     </ul>
   </div>
 </aside>

@@ -9,6 +9,8 @@ import typingIndicator from './TypingIndicator.vue'
 
 <template>
     <div class="chat-message">
-        
+        <div>
+            
+        </div>
     </div>
 </template>
