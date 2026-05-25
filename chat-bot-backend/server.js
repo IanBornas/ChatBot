@@ -12,6 +12,16 @@ app.get('/', (req,res) => {
    res.send('Backend Chatbot')
 })
 
+app.post('api/chat', (req,res) => {
+    const {message} = req.body
+    console.log("Message: ",message)
+    //replace later on
+    const reply = `You Said: ${message}`
+    res.json({
+        reply
+    })
+})
+
 
 
 app.listen(PORT, () => {

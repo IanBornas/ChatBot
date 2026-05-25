@@ -1,10 +1,18 @@
 <script setup>
 import { ref } from 'vue'
 
+const props = defineProps({
+  disabled: {
+    type: Boolean,
+    default: false
+  }
+})
+
 const emit = defineEmits(['send-message'])
 const message = ref('')
 
 function sendMessage() {
+  if (props.disabled) return
   const trimmed = message.value.trim()
   if (!trimmed) return
   emit('send-message', trimmed)
@@ -24,9 +32,10 @@ function sendMessage() {
                     class="min-h-[44px] max-h-32 w-full flex-1 resize-none bg-transparent px-2 py-2 outline-none"
                     placeholder="Message ChatBotUI"
                     v-model="message"
+                    :disabled="disabled"
                     @keydown.enter.exact.prevent="sendMessage">
                 </textarea>
-                <button type="button" class="btn btn-circle btn-primary" aria-label="Send message" @click="sendMessage">
+                <button type="button" class="btn btn-circle btn-primary" aria-label="Send message" :disabled="disabled" @click="sendMessage">
                     <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M10 14l11-11" />
