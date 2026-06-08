@@ -25,8 +25,6 @@ function clearCurrent() {
       <p class="text-xs uppercase tracking-wide text-base-content/60">Chat</p>
       <h1 class="truncate text-lg font-semibold">{{ title }}</h1>
     </div>
-    <div>
-      <button @click="clearCurrent" class="text-sm text-red-400 hover:text-red-500">Clear</button>
-    </div>
+    <!-- Clear button removed per request -->
   </div>
 </template>
