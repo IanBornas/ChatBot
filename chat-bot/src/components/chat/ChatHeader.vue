@@ -1,10 +1,21 @@
 <script setup>
+import { inject } from 'vue'
+
 defineProps({
   title: {
     type: String,
     default: 'New Chat'
   }
 })
+
+const chatState = inject('chatState') || {}
+
+function clearCurrent() {
+  if (!chatState.clearMessages) return
+  if (confirm('Clear all messages in this chat?')) {
+    chatState.clearMessages()
+  }
+}
 </script>
 
 
@@ -13,6 +24,9 @@ defineProps({
     <div class="min-w-0">
       <p class="text-xs uppercase tracking-wide text-base-content/60">Chat</p>
       <h1 class="truncate text-lg font-semibold">{{ title }}</h1>
+    </div>
+    <div>
+      <button @click="clearCurrent" class="text-sm text-red-400 hover:text-red-500">Clear</button>
     </div>
   </div>
 </template>

@@ -1,5 +1,31 @@
 <script setup>
+import { ref } from 'vue'
 
+// Initialize theme synchronously from localStorage so the UI doesn't flip
+const savedTheme = typeof window !== 'undefined' ? localStorage.getItem('theme') : null
+const isDark = ref(savedTheme === 'light' ? false : true)
+
+const applyDark = () => {
+    document.documentElement.classList.add('dark')
+}
+const applyLight = () => {
+    document.documentElement.classList.remove('dark')
+}
+
+if (isDark.value) applyDark()
+else applyLight()
+
+const setDarkMode = () => {
+    isDark.value = true
+    applyDark()
+    localStorage.setItem('theme', 'dark')
+}
+
+const setLightMode = () => {
+    isDark.value = false
+    applyLight()
+    localStorage.setItem('theme', 'light')
+}
 </script>
 
 
@@ -13,12 +39,24 @@
             <div class="rounded-2xl border border-base-content/10 bg-base-100/70 px-6 py-5 shadow-sm">
                 <h2 class="text-lg font-semibold">Appearance</h2>
                 <div class="mt-4 grid gap-3 sm:grid-cols-2">
-                    <button type="button" class="flex items-center justify-between rounded-xl border border-base-content/15 bg-base-200/40 px-4 py-3 text-sm font-medium hover:border-base-content/25 hover:bg-base-200/60">
+                    <button
+                        type="button"
+                        @click="setDarkMode"
+                        :class="isDark ? 'border-primary bg-primary/10' : 'border-base-content/15 bg-base-200/40 hover:border-base-content/25 hover:bg-base-200/60'"
+                        class="flex items-center justify-between rounded-xl border px-4 py-3 text-sm font-medium transition-colors"
+                    >
                         <span>Dark Mode</span>
-                        <span class="text-xs text-base-content/60">Default</span>
+                        <span v-if="isDark" class="text-xs text-primary">✓ Active</span>
+                        <span v-else class="text-xs text-base-content/60">Default</span>
                     </button>
-                    <button type="button" class="flex items-center justify-between rounded-xl border border-base-content/15 bg-base-200/40 px-4 py-3 text-sm font-medium hover:border-base-content/25 hover:bg-base-200/60">
+                    <button
+                        type="button"
+                        @click="setLightMode"
+                        :class="!isDark ? 'border-primary bg-primary/10' : 'border-base-content/15 bg-base-200/40 hover:border-base-content/25 hover:bg-base-200/60'"
+                        class="flex items-center justify-between rounded-xl border px-4 py-3 text-sm font-medium transition-colors"
+                    >
                         <span>Light Mode</span>
+                        <span v-if="!isDark" class="text-xs text-primary">✓ Active</span>
                     </button>
                 </div>
             </div>

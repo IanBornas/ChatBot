@@ -1,4 +1,352 @@
 @import "tailwindcss";
-@plugin "flyonui";
 @import "flyonui/variants.css";
-@source "flyonui/dist/index.js";
+
+:root {
+  /* Page background colors (light theme) */
+  --b1: #f7e6ea; /* very pale pink */
+  --b2: #f3dfe5;
+  --b3: #edd5dc;
+  --bc: #2d1b33;
+  --pc: #2d1b33;
+  --sc: #2d1b33;
+  --sidebar-bg: #ffffff;
+  --rail-bg: #352045;
+  --sidebar-border: rgba(45,27,51,0.06);
+  --ac: #2d1b33;
+  --nc: #2d1b33;
+  --suc: #2d1b33;
+  --wac: #2d1b33;
+  --erc: #2d1b33;
+  --inc: #2d1b33;
+  --fc: #2d1b33;
+  --p: #d9b3d0;
+  --pf: #2d1b33;
+  --s: #c994b8;
+  --sf: #2d1b33;
+  --a: #b575a0;
+  --af: #2d1b33;
+  --n: #2d1b33;
+  --nf: #d8c0d0;
+  --su: #6b9f7a;
+  --suf: #2d1b33;
+  --wa: #a68530;
+  --waf: #2d1b33;
+  --er: #d67a7a;
+  --erf: #2d1b33;
+  --in: #7b9fd4;
+  --inf: #2d1b33;
+}
+
+/* UI simplification tokens */
+:root {
+  --radius: 14px;
+  --card-bg: rgba(255,255,255,0.88);
+  --card-bg-dark: rgba(255,255,255,0.02);
+  --panel-border-subtle: rgba(45,27,51,0.06);
+  --soft-shadow: 0 10px 30px rgba(15,15,20,0.06);
+}
+
+.dark {
+  --b1: #40284f;
+  --b2: #3a2145;
+  --b3: #341a3d;
+  --bc: #f5f5f5;
+  --sidebar-bg: #3a2a45;
+  --rail-bg: #24152a;
+  --sidebar-border: rgba(245,245,245,0.06);
+  --pc: #f5f5f5;
+  --sc: #f5f5f5;
+  --ac: #f5f5f5;
+  --nc: #f5f5f5;
+  --suc: #f5f5f5;
+  --wac: #f5f5f5;
+  --erc: #f5f5f5;
+  --inc: #f5f5f5;
+  --fc: #f5f5f5;
+  --p: #e0b8d8;
+  --pf: #f5f5f5;
+  --s: #d0a8c8;
+  --sf: #f5f5f5;
+  --a: #c89fb0;
+  --af: #f5f5f5;
+  --n: #f5f5f5;
+  --nf: #5a3575;
+  --su: #7cc894;
+  --suf: #f5f5f5;
+  --wa: #e6ba56;
+  --waf: #f5f5f5;
+  --er: #f09090;
+  --erf: #f5f5f5;
+  --in: #8fa5e0;
+  --inf: #f5f5f5;
+}
+
+/* Simplified rounded UI: rounded cards, soft shadows, subtle borders */
+.rounded-2xl {
+  border-radius: var(--radius) !important;
+  background: var(--card-bg) !important;
+  box-shadow: var(--soft-shadow) !important;
+  border: 1px solid var(--panel-border-subtle) !important;
+}
+
+.dark .rounded-2xl {
+  background: var(--card-bg-dark) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.45) !important;
+  border: 1px solid rgba(245,245,245,0.04) !important;
+}
+
+/* Force chat panel and input panel to follow theme tokens (dark/light) */
+.chat-panel {
+  background: var(--card-bg) !important;
+  border-color: var(--panel-border-subtle) !important;
+  box-shadow: var(--soft-shadow) !important;
+}
+
+.message-input-panel {
+  background: var(--card-bg) !important;
+  border-color: var(--panel-border-subtle) !important;
+}
+
+.dark .chat-panel {
+  background: var(--card-bg-dark) !important;
+  border-color: rgba(245,245,245,0.04) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.45) !important;
+}
+
+.dark .message-input-panel {
+  background: var(--card-bg-dark) !important;
+  border-color: rgba(245,245,245,0.04) !important;
+}
+
+/* Input and buttons: gentler corners */
+.btn {
+  border-radius: 10px !important;
+}
+
+.btn.btn-circle {
+  border-radius: 9999px !important;
+}
+
+/* Chat area - cleaner bubbles */
+.chat-bubble {
+  border-radius: 12px !important;
+  padding: 10px 14px !important;
+  background: rgba(255,255,255,0.9) !important;
+  border: 1px solid rgba(45,27,51,0.06) !important;
+  box-shadow: 0 8px 20px rgba(15,15,20,0.04) !important;
+}
+
+.dark .chat-bubble {
+  background: rgba(255,255,255,0.03) !important;
+  border: 1px solid rgba(245,245,245,0.04) !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45) !important;
+}
+
+/* Make the main chat container look like the mockup: centered, gentle rounded columns */
+main .mx-auto.w-full.max-w-4xl {
+  background: transparent !important;
+}
+
+/* Ensure message input area uses softened look */
+.mx-auto.w-full.max-w-4xl.rounded-2xl.border {
+  background: var(--card-bg) !important;
+}
+
+/* Slightly larger radii for bigger panels */
+.rounded-3xl { border-radius: 20px !important; }
+
+body {
+  background-color: var(--b1);
+  color: var(--bc);
+}
+
+#collapsible-mini-sidebar {
+  background-color: var(--sidebar-bg) !important;
+  color: var(--bc) !important;
+  border-right: 1px solid var(--sidebar-border);
+}
+
+#collapsible-mini-sidebar .drawer-header {
+  background: transparent !important;
+}
+
+.overlay-minified {
+  background-color: var(--rail-bg) !important;
+  color: #fff !important;
+}
+
+#collapsible-mini-sidebar .menu a,
+#collapsible-mini-sidebar .menu button,
+#collapsible-mini-sidebar .menu .router-link {
+  color: var(--bc) !important;
+}
+#collapsible-mini-sidebar .menu a,
+#collapsible-mini-sidebar .menu button,
+#collapsible-mini-sidebar .menu .router-link {
+  color: var(--bc) !important;
+}
+
+/* App sidebar simple layout */
+.app-sidebar {
+  width: 92px;
+  background: #ffffff;
+  color: #222;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  box-shadow: 2px 0 12px rgba(15,15,20,0.06);
+  display: flex;
+  align-items: stretch;
+  z-index: 50;
+}
+
+.app-sidebar .sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.sidebar-logo { padding: 18px 12px }
+.sidebar-logo .logo-icon { width:36px; height:36px; }
+
+.sidebar-nav { flex:1; overflow:auto }
+.sidebar-nav ul { padding: 8px 0 }
+.nav-item {
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 12px;
+  border-radius:10px;
+  background: transparent;
+  color: inherit;
+  border: none;
+}
+.nav-icon { width:28px; display:inline-flex; justify-content:center }
+.nav-label { display:none }
+
+.app-sidebar:hover { width: 240px; transition: width 160ms ease }
+.app-sidebar:hover .nav-label { display:inline-block }
+
+.app-sidebar .nav-item.router-link { text-decoration:none }
+.app-sidebar .nav-item:hover { background: rgba(59,130,246,0.06); }
+.app-sidebar .nav-item.active { border-left: 4px solid #2b8dfd; background: rgba(43,141,253,0.06) }
+
+.sidebar-footer { padding: 12px }
+
+/* Dark-mode variant: keep rail dark when collapsed */
+.dark .app-sidebar { background: #24162a; color:#fff }
+.dark .app-sidebar .nav-item:hover { background: rgba(255,255,255,0.03) }
+.dark .app-sidebar .nav-item.active { border-left-color:#60a5fa; background: rgba(96,165,250,0.06) }
+
+
+.card, .panel {
+  background: #ffffff;
+}
+
+.menu-title {
+  background: transparent !important;
+  color: rgba(45,27,51,0.72) !important;
+  padding: 0.5rem 0.75rem;
+  margin: 0;
+}
+
+.overlay-minified .menu-title,
+#collapsible-mini-sidebar.overlay-minified .menu-title {
+  display: none !important;
+}
+
+.drawer-title {
+  background: transparent !important;
+  padding: 0; /* rely on container spacing */
+  margin: 0;
+  color: var(--bc) !important;
+}
+
+/* Chat message UI improvements: shadows, borders, and separators for depth */
+.chat {
+  position: relative;
+  padding: 0 6px;
+}
+
+.chat:not(:first-child)::before {
+  content: '';
+  display: block;
+  height: 1px;
+  margin: 2px 0 8px;
+  background: rgba(45,27,51,0.04);
+  width: calc(100% - 12px);
+  border-radius: 1px;
+}
+
+.chat-bubble {
+  border-radius: 12px;
+  padding: 12px 14px;
+  border: 1px solid rgba(45,27,51,0.06);
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 6px 20px rgba(45,27,51,0.06);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.chat-bubble:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 40px rgba(45,27,51,0.09);
+}
+
+/* Sender vs receiver variants */
+.chat-sender .chat-bubble {
+  margin-left: auto;
+  background: linear-gradient(180deg, rgba(181,120,175,0.12), rgba(181,120,175,0.06));
+  border-color: rgba(181,120,175,0.18);
+}
+
+.chat-receiver .chat-bubble {
+  margin-right: auto;
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(250,250,250,0.85));
+  border-color: rgba(45,27,51,0.06);
+}
+
+/* Dark mode overrides for chat bubbles and separators */
+.dark .chat:not(:first-child)::before {
+  background: rgba(245,245,245,0.03);
+}
+
+.dark .chat-bubble {
+  background: rgba(255,255,255,0.02);
+  border-color: rgba(245,245,245,0.04);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+}
+
+.dark .chat-sender .chat-bubble {
+  background: linear-gradient(180deg, rgba(200,140,185,0.08), rgba(200,140,185,0.04));
+  border-color: rgba(200,140,185,0.14);
+}
+
+.dark .chat-receiver .chat-bubble {
+  background: rgba(255,255,255,0.02);
+  border-color: rgba(245,245,245,0.04);
+}
+
+/* Small utility: make long messages wrap nicely and keep readable line-height */
+.chat-bubble {
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+/* Small refinements for hover states */
+#collapsible-mini-sidebar .menu li button:hover,
+#collapsible-mini-sidebar .menu li a:hover {
+  background: rgba(45,27,51,0.04) !important;
+}
+
+/* Dark-mode specific refinements for expanded popup when overlayed */
+.dark #collapsible-mini-sidebar {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+.dark #collapsible-mini-sidebar .menu li button:hover,
+.dark #collapsible-mini-sidebar .menu li a:hover {
+  background: rgba(245,245,245,0.03) !important;
+}
+
