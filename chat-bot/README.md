@@ -23,12 +23,28 @@ See [Vite Configuration Reference](https://vite.dev/config/).
 
 ```sh
 npm install
+npm --prefix server install
 ```
 
 ### Compile and Hot-Reload for Development
 
+Start Ollama first, then run the Vue app and API server together:
+
+```sh
+ollama serve
+ollama pull llama3.1:8b
+```
+
 ```sh
 npm run dev
+```
+
+The app runs through Vite and proxies `/api` requests to the Express server on port 3000.
+
+You can change the backend settings with environment variables:
+
+```sh
+$env:PORT=3000; $env:OLLAMA_URL="http://localhost:11434"; $env:OLLAMA_MODEL="llama3.1:8b"; npm run dev
 ```
 
 ### Compile and Minify for Production
