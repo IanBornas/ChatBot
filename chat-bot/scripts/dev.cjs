@@ -1,7 +1,7 @@
 const { spawn } = require("node:child_process");
 
 const isWindows = process.platform === "win32";
-const npm = isWindows ? "npm.cmd" : "npm";
+const npm = "npm";
 
 const commands = [
     {
@@ -19,7 +19,7 @@ const commands = [
 const children = commands.map(({ name, command, args }) => {
     const child = spawn(command, args, {
         stdio: "inherit",
-        shell: false
+        shell: isWindows
     });
 
     child.on("exit", (code, signal) => {
