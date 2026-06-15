@@ -45,7 +45,9 @@ async function handleSendMessage(message) {
       throw new Error('Invalid response from server')
     }
 
-    props.addMessage(data.reply, 'assistant')
+    props.addMessage(data.reply, 'assistant', {
+      confidence: data.confidence || 'medium'
+    })
   } catch (error) {
     const details = error instanceof Error ? error.message : 'Request failed'
     errorMessage.value = `Unable to reach the server. ${details}`

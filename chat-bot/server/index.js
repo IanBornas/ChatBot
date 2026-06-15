@@ -7,6 +7,33 @@ const PORT = process.env.PORT || 3000;
 const OLLAMA_URL = process.env.OLLAMA_URL || "http://localhost:11434";
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "llama3.1:8b";
 
+function estimateConfidence(reply) {
+    const normalized = reply.toLowerCase();
+    const uncertaintyWords = [
+        "i don't know",
+        "i do not know",
+        "not sure",
+        "uncertain",
+        "cannot determine",
+        "can't determine",
+        "may be",
+        "might be",
+        "possibly",
+        "probably",
+        "as an ai"
+    ];
+
+    if (uncertaintyWords.some((word) => normalized.includes(word))) {
+        return "low";
+    }
+
+    if (reply.length < 80 || normalized.includes("it depends")) {
+        return "medium";
+    }
+
+    return "high";
+}
+
 app.use(cors());
 app.use(express.json());
 
@@ -50,15 +77,17 @@ app.post("/api/chat", async (req, res) => {
         }
 
         res.json({
-            reply
+            reply,
+            confidence: estimateConfidence(reply)
         });
 
     } catch(error) {
 
         console.error("Ollama request failed:", error.message);
 
-        res.status(500).json({
-            error: "AI unavailable. Make sure Ollama is running and the model is installed."
+        res.json({
+            reply: "I could not reach the local AI model yet. Make sure Ollama is running with the configured model, then ask again for a full answer.",
+            confidence: "low"
         });
 
     }

@@ -44,13 +44,14 @@ function selectChat(chatId) {
   }
 }
 
-function addMessage(content, role = 'user') {
+function addMessage(content, role = 'user', options = {}) {
   const trimmed = content.trim()
   if (!trimmed) return
   const message = {
     id: Date.now(),
     role,
-    content: trimmed
+    content: trimmed,
+    ...options
   }
   currentChat.value.messages.push(message)
   if (currentChat.value.title === 'New Chat') {
