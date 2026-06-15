@@ -3,7 +3,7 @@ Arificial Intelligence Project
 
 # Update 1.01
 
-in terminal 
+In the first terminal
 1. cd chat-bot
 2. cd server
 3. npm install axios cors
