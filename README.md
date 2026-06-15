@@ -1,14 +1,6 @@
 # ChatBot
 Arificial Intelligence Project
 
-# How to run
-in terminal
-1. cd chat-bot
-2. npm run dev
-
-
-#more updates soon
-
 # Update 1.01
 
 in terminal 
@@ -18,3 +10,7 @@ in terminal
 4. node index.js
 5. 
 6. npm run dev
+
+In Another Terminal
+1. git status
+2. git pull origin-ian
