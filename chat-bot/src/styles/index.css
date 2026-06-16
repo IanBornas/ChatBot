@@ -2,3 +2,29 @@
 @import "flyonui/variants.css";
 @plugin "flyonui";
 @source "flyonui/dist/index.js";
+
+:root {
+  color-scheme: dark;
+}
+
+html[data-theme='light'] {
+  color-scheme: light;
+  --base-100: #ffffff;
+  --base-200: #f8fafc;
+  --base-content: #111827;
+  --border-color: #d1d5db;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --base-100: #0f172a;
+  --base-200: #111827;
+  --base-content: #e2e8f0;
+  --border-color: #334155;
+}
+
+body {
+  transition: background-color 0.2s ease, color 0.2s ease;
+  background-color: var(--base-200);
+  color: var(--base-content);
+}

@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import FileUpload from '../FileUpload.vue'
 
 const props = defineProps({
   disabled: {
@@ -8,8 +9,9 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['send-message'])
+const emit = defineEmits(['send-message','files-selected'])
 const message = ref('')
+const showUploader = ref(false)
 
 function sendMessage() {
   if (props.disabled) return
@@ -24,7 +26,7 @@ function sendMessage() {
     <div class="mt-auto pt-2">
         <div class="mx-auto w-full max-w-4xl rounded-2xl border border-base-content/20 bg-base-100/80 px-3 py-2 shadow-sm">
             <div class="flex items-end gap-2">
-                <button type="button" class="btn btn-circle btn-text" aria-label="Attach file">
+                <button type="button" class="btn btn-circle btn-text" aria-label="Attach file" @click.prevent="showUploader = !showUploader">
                     <span class="text-lg leading-none">+</span>
                 </button>
                 <textarea
@@ -43,6 +45,10 @@ function sendMessage() {
                     </svg>
                 </button>
             </div>
+            <div v-if="showUploader" class="mt-3">
+                <FileUpload @files-selected="files => { emit('files-selected', files); showUploader = false }" />
+            </div>
         </div>
     </div>
 </template>
+
