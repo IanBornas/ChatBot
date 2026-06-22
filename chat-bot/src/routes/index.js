@@ -4,6 +4,7 @@ import HomeView from '../pages/HomePage.vue'
 import AboutView from '../pages/AboutPage.vue'
 import SearchChat from '../pages/SearchChat.vue'
 import Settings from '../pages/Settings.vue'
+import History from '../pages/History.vue'
 
 const routes = [
     {
@@ -20,8 +21,12 @@ const routes = [
         path:'/search-history',
         name:'search-history',
         component: SearchChat
-    }
-    ,
+    },
+    {
+        path:'/history',
+        name:'history',
+        component: History
+    },
     {
         path:'/settings',
         name:'settings',

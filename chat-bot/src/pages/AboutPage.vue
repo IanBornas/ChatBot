@@ -1,5 +1,5 @@
 <script setup>
-import logo from '../assets/chatbot-logo.png'
+import logo from '../assets/knight bot.png'
 </script>
 
 <template>

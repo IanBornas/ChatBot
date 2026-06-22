@@ -28,3 +28,102 @@ body {
   background-color: var(--base-200);
   color: var(--base-content);
 }
+
+.app-sidebar {
+  width: 92px;
+  background: #ffffff;
+  color: #222222;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  box-shadow: 2px 0 12px rgba(15, 15, 20, 0.06);
+  display: flex;
+  align-items: stretch;
+  z-index: 50;
+  transition: width 160ms ease;
+}
+
+.app-sidebar .sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.sidebar-logo {
+  padding: 18px 12px;
+}
+
+.sidebar-logo .logo-icon {
+  width: 36px;
+  height: 36px;
+}
+
+.sidebar-nav {
+  flex: 1;
+  overflow: auto;
+}
+
+.sidebar-nav ul,
+.sidebar-footer ul {
+  padding: 8px 0;
+}
+
+.nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  border: none;
+  text-decoration: none;
+}
+
+.nav-icon {
+  width: 28px;
+  display: inline-flex;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nav-label {
+  display: none;
+}
+
+.app-sidebar:hover {
+  width: 240px;
+}
+
+.app-sidebar:hover .nav-label {
+  display: inline-block;
+}
+
+.app-sidebar .nav-item:hover {
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.router-link-active.nav-item {
+  border-left: 4px solid #2b8dfd;
+  background: rgba(43, 141, 253, 0.06);
+}
+
+.sidebar-footer {
+  padding: 12px;
+}
+
+.dark .app-sidebar {
+  background: #24162a;
+  color: #ffffff;
+}
+
+.dark .app-sidebar .nav-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.dark .router-link-active.nav-item {
+  border-left-color: #60a5fa;
+  background: rgba(96, 165, 250, 0.06);
+}

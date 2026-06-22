@@ -1,23 +1,9 @@
 <script setup>
-import { provide, ref, onMounted, watch } from 'vue'
+import { provide, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import NavBar from './components/layout/Navbar.vue'
 
 const router = useRouter()
-
-function loadChats() {
-  try {
-    const raw = localStorage.getItem('chat_history')
-    if (!raw) return []
-    return JSON.parse(raw)
-  } catch (e) {
-    console.warn('Failed to load chats from localStorage', e)
-    return []
-  }
-}
-
-const chats = ref(loadChats())
-const currentChat = ref(createChat())
 
 function createChat() {
   return {
@@ -27,7 +13,23 @@ function createChat() {
   }
 }
 
+function loadChats() {
+  try {
+    const raw = localStorage.getItem('chat_history')
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed) ? parsed : []
+  } catch (error) {
+    console.warn('Failed to load chats from localStorage', error)
+    return []
+  }
+}
+
+const chats = ref(loadChats())
+const currentChat = ref(createChat())
+
 function upsertChat(chat) {
+  if (!chat || !chat.messages?.length) return
   const index = chats.value.findIndex((item) => item.id === chat.id)
   if (index === -1) {
     chats.value.push(chat)
@@ -36,18 +38,28 @@ function upsertChat(chat) {
   chats.value[index] = chat
 }
 
-watch(chats, (val) => {
-  try {
-    localStorage.setItem('chat_history', JSON.stringify(val))
-  } catch (e) {
-    console.warn('Failed to persist chats to localStorage', e)
-  }
-}, { deep: true })
+watch(
+  chats,
+  (value) => {
+    try {
+      localStorage.setItem('chat_history', JSON.stringify(value))
+    } catch (error) {
+      console.warn('Failed to persist chats to localStorage', error)
+    }
+  },
+  { deep: true }
+)
+
+watch(
+  currentChat,
+  (chat) => {
+    upsertChat(chat)
+  },
+  { deep: true }
+)
 
 function createNewChat() {
-  if (currentChat.value.messages.length > 0) {
-    upsertChat(currentChat.value)
-  }
+  upsertChat(currentChat.value)
   currentChat.value = createChat()
   if (router.currentRoute.value.path !== '/') {
     router.push('/')
@@ -64,9 +76,27 @@ function selectChat(chatId) {
 }
 
 function addMessage(content, role = 'user', options = {}) {
-  const trimmed = content.trim()
+  if (typeof content === 'object' && content !== null) {
+    const text = String(content.text || '').trim()
+    const attachments = content.attachments || []
+    if (!text && attachments.length === 0) return
+
+    const message = {
+      id: Date.now(),
+      role,
+      content: text,
+      attachments,
+      ...options
+    }
+    currentChat.value.messages.push(message)
+    if (currentChat.value.title === 'New Chat' && text) {
+      currentChat.value.title = text.slice(0, 40)
+    }
+    return
+  }
+
+  const trimmed = String(content).trim()
   if (!trimmed) return
-  console.log('addMessage called:', { content, role, options })
   const message = {
     id: Date.now(),
     role,
@@ -79,25 +109,41 @@ function addMessage(content, role = 'user', options = {}) {
   }
 }
 
-function deleteChat(chatId) {
-  const idx = chats.value.findIndex(c => c.id === chatId)
-  if (idx !== -1) chats.value.splice(idx, 1)
-  if (currentChat.value && currentChat.value.id === chatId) {
-    currentChat.value = createChat()
+function deleteMessage(chatIdOrMessageId, maybeMessageId) {
+  const messageId = maybeMessageId ?? chatIdOrMessageId
+  const chatId = maybeMessageId ? chatIdOrMessageId : currentChat.value.id
+  const chat = chatId === currentChat.value.id
+    ? currentChat.value
+    : chats.value.find((item) => item.id === chatId)
+
+  if (!chat) return false
+  const index = chat.messages.findIndex((message) => message.id === messageId)
+  if (index === -1) return false
+  chat.messages.splice(index, 1)
+  if (chat.id === currentChat.value.id && chat.messages.length === 0) {
+    chat.title = 'New Chat'
   }
+  return true
 }
 
-function deleteMessage(chatId, messageId) {
-  // try currentChat first, then saved chats
-  if (currentChat.value && currentChat.value.id === chatId) {
-    const idx = (currentChat.value.messages || []).findIndex(m => m.id === messageId)
-    if (idx !== -1) currentChat.value.messages.splice(idx, 1)
-    return
+function clearMessages() {
+  currentChat.value.messages = []
+  currentChat.value.title = 'New Chat'
+}
+
+function deleteChat(chatId) {
+  const index = chats.value.findIndex((chat) => chat.id === chatId)
+  if (index === -1) return null
+  const [removed] = chats.value.splice(index, 1)
+  if (currentChat.value.id === chatId) {
+    currentChat.value = createChat()
   }
-  const chat = chats.value.find(c => c.id === chatId)
-  if (!chat) return
-  const idx = (chat.messages || []).findIndex(m => m.id === messageId)
-  if (idx !== -1) chat.messages.splice(idx, 1)
+  return removed
+}
+
+function clearChats() {
+  chats.value = []
+  currentChat.value = createChat()
 }
 
 provide('chatState', {
@@ -106,30 +152,29 @@ provide('chatState', {
   createNewChat,
   selectChat,
   addMessage,
+  deleteMessage,
+  clearMessages,
   deleteChat,
-  deleteMessage
+  clearChats
 })
 </script>
 
 <template>
+  <NavBar
+    :chats="chats"
+    @new-chat="createNewChat"
+    @select-chat="selectChat"
+  />
 
-    <!-- Sidebar -->
-    <NavBar
-      :chats="chats"
-      @new-chat="createNewChat"
-      @select-chat="selectChat"
-    />
-  
-    <router-view/>
+  <router-view />
 </template>
 
 <style>
 :root {
-  --sidebar-width: 16.5rem; /* default sidebar width (w-66) */
-  --sidebar-collapsed-width: 4.25rem; /* collapsed / minified width (w-17) */
+  --sidebar-width: 16.5rem;
+  --sidebar-collapsed-width: 4.25rem;
 }
 
-/* When the sidebar is minified, override the layout variable */
 .overlay-minified {
   --sidebar-width: var(--sidebar-collapsed-width);
 }
